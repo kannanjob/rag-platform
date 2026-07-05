@@ -37,6 +37,8 @@ class RAGService:
             chunks = self.chunker.split(docs)
             self.db.add_documents(chunks)
 
+        self.answer_cache.clear()
+
     def process_urls(self, urls):
 
         for url in urls:
@@ -44,12 +46,16 @@ class RAGService:
             chunks = self.chunker.split(docs)
             self.db.add_documents(chunks)
 
+        self.answer_cache.clear()
+
     def process_images(self, files):
 
         for file in files:
             docs = self.image_loader.load(file)
             chunks = self.chunker.split(docs)
             self.db.add_documents(chunks)
+
+        self.answer_cache.clear()
     # ---------------------------------
     # Helpers
     # ---------------------------------
