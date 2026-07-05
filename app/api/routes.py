@@ -32,6 +32,8 @@ async def upload_pdf(files: List[UploadFile] = File(...)):
             message="PDF files uploaded successfully"
         )
 
+    except HTTPException:
+        raise
     except Exception as e:
         raise HTTPException(
             status_code=500,
@@ -57,6 +59,8 @@ def upload_url(payload: URLUploadRequest):
             message="URLs processed successfully"
         )
 
+    except HTTPException:
+        raise
     except Exception as e:
         raise HTTPException(
             status_code=500,
@@ -67,11 +71,19 @@ def upload_url(payload: URLUploadRequest):
 def upload_image(files: List[UploadFile] = File(...)):
 
     try:
+        if not files:
+            raise HTTPException(
+                status_code=400,
+                detail="No image files uploaded"
+            )
+
         rag_service.process_images(files)
         return MessageResponse(
             message="Images processed successfully"
         )
 
+    except HTTPException:
+        raise
     except Exception as e:
         raise HTTPException(
             status_code=500,
